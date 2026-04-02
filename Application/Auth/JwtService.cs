@@ -11,7 +11,7 @@ namespace Application.Auth
     {
         private readonly IConfiguration _config;
 
-        cdpublic JwtService(IConfiguration config)
+        public JwtService(IConfiguration config)
         {
             _config = config;
         }
