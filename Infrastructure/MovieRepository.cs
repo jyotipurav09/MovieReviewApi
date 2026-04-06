@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.Movies;
+using Domain.Entities;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;

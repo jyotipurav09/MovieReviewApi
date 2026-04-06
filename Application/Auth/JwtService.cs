@@ -18,6 +18,15 @@ namespace Application.Auth
 
         public string GenerateToken(User user)
         {
+            var jwtSection = _config.GetSection("Jwt");
+
+            var keyString = jwtSection["Key"];
+
+            if (string.IsNullOrEmpty(keyString))
+            {
+                throw new Exception("JWT Key is missing in appsettings.json");
+            }
+
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
@@ -26,14 +35,14 @@ namespace Application.Auth
             };
 
             var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_config["Jwt:Key"])
+                Encoding.UTF8.GetBytes(keyString)
             );
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                issuer: _config["Jwt:Issuer"],
-                audience: _config["Jwt:Audience"],
+                issuer: jwtSection["Issuer"],
+                audience: jwtSection["Audience"],
                 claims: claims,
                 expires: DateTime.UtcNow.AddHours(2),
                 signingCredentials: creds

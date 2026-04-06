@@ -1,7 +1,7 @@
 ﻿using Application.Dtos;
 using Application.Movies;
 using Domain.Entities;
-using Infrastructure.Repositories;
+//using Infrastructure.Repositories;
 
 namespace Application.Services
 {

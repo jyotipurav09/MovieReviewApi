@@ -1,5 +1,6 @@
 ﻿using Application.Auth;
 using Application.Dtos;
+using Application.Users;
 using Domain.Entities;
 using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
@@ -14,11 +15,13 @@ namespace MovieReviewApi.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly IJwtService _jwtService;
+        private readonly IEmailService _emailService;
 
-        public AuthController(IUserRepository userRepository, IJwtService jwtService)
+        public AuthController(IUserRepository userRepository, IJwtService jwtService,IEmailService emailService)
         {
             _userRepository = userRepository;
             _jwtService = jwtService;
+            _emailService = emailService;
         }
 
      
@@ -68,5 +71,83 @@ namespace MovieReviewApi.Controllers
                 Email = user.Email
             });
         }
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordDto request)
+        {
+            var user = await _userRepository.GetByEmailAsync(request.Email);
+            if (user == null) return NotFound("User not found");
+
+           
+            if (user.Password != request.OldPassword)
+                return BadRequest("Old password is incorrect");
+
+            
+            if (user.Password == request.NewPassword)
+                return BadRequest("New password cannot be the same as old password");
+
+          
+            user.Password = request.NewPassword;
+            await _userRepository.UpdateAsync(user);
+
+            return Ok("Password changed successfully");
+        }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordDto request)
+        {
+            var user = await _userRepository.GetByEmailAsync(request.Email);
+            if (user == null) return NotFound("Email not found");
+
+          
+            var otp = new Random().Next(100000, 999999).ToString();
+
+            
+            user.PasswordOtp = otp;
+            user.PasswordOtpExpiry = DateTime.UtcNow.AddMinutes(10);
+            await _userRepository.UpdateAsync(user);
+
+          
+            await _emailService.SendOtpAsync(user.Email, otp, "Reset your password");
+
+            return Ok("OTP sent to email");
+        }
+
+        
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto request)
+        {
+            var user = await _userRepository.GetByEmailAsync(request.Email);
+            if (user == null) return NotFound("Email not found");
+
+            
+            if (user.PasswordOtp != request.Otp)
+                return BadRequest("Invalid OTP");
+
+            if (user.PasswordOtpExpiry < DateTime.UtcNow)
+                return BadRequest("OTP expired");
+
+           
+            if (user.Password == request.NewPassword)
+                return BadRequest("New password cannot be same as old password");
+
+           
+            user.Password = request.NewPassword;
+
+          
+            user.PasswordOtp = null;
+            user.PasswordOtpExpiry = null;
+
+            await _userRepository.UpdateAsync(user);
+
+            return Ok("Password reset successfully");
+        }
+
+
+
+
+
+
+
+
     }
 }

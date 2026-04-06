@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
 
-namespace Infrastructure.Repositories
+namespace Application.Movies
 {
     public interface IMovieRepository
     {
@@ -15,5 +15,7 @@ namespace Infrastructure.Repositories
         Task<Movie> UpdateAsync(Movie movie);
 
         Task<bool> DeleteAsync(int id);
+
+
     }
 }
