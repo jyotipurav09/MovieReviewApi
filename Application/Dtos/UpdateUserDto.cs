@@ -14,8 +14,8 @@ namespace Application.Dtos
         [MaxLength(100)]
         public string LastName { get; set; }
         public string Email { get; set; }
-        [Required] 
-        public string Password { get; set; }
+       // [Required] 
+       // public string Password { get; set; }
         [Required]
         [StringLength(10,MinimumLength =10)]
 

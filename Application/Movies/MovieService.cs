@@ -1,7 +1,7 @@
 ﻿using Application.Dtos;
 using Application.Movies;
 using Domain.Entities;
-//using Infrastructure.Repositories;
+
 
 namespace Application.Services
 {
@@ -58,9 +58,12 @@ namespace Application.Services
                 Id = m.Id,
                 Title = m.Title,
                 ReleaseYear = m.ReleaseYear,
-               
+
             }).ToList();
         }
+
+
+
 
         public async Task<List<MovieResponseDto>> SearchMoviesAsync(string title)
         {
@@ -95,6 +98,69 @@ namespace Application.Services
               
             };
         }
+        
+            public async Task<List<MovieResponseDto>> GetMoviesAsync(MovieQueryDto query)
+            {
+                var movies = await _movieRepository.GetAllAsync(); 
+
+               
+                if (!string.IsNullOrEmpty(query.Category))
+                    movies = movies.Where(m => m.Category == query.Category).ToList();
+
+                if (!string.IsNullOrEmpty(query.Genre))
+                    movies = movies.Where(m => m.Genre == query.Genre).ToList();
+
+                if (query.ReleaseYear.HasValue)
+                    movies = movies.Where(m => m.ReleaseYear == query.ReleaseYear).ToList();
+
+                if (query.MinRating.HasValue)
+                    movies = movies.Where(m => m.Rating >= query.MinRating).ToList();
+
+                if (!string.IsNullOrEmpty(query.Search))
+                    movies = movies.Where(m => m.Title.Contains(query.Search, StringComparison.OrdinalIgnoreCase)).ToList();
+
+                
+                if (!string.IsNullOrEmpty(query.SortBy))
+                {
+                    movies = query.SortBy.ToLower() switch
+                    {
+                        "rating" => query.SortDescending
+                                    ? movies.OrderByDescending(m => m.Rating).ToList()
+                                    : movies.OrderBy(m => m.Rating).ToList(),
+
+                        "year" => query.SortDescending
+                                    ? movies.OrderByDescending(m => m.ReleaseYear).ToList()
+                                    : movies.OrderBy(m => m.ReleaseYear).ToList(),
+
+                        "title" => query.SortDescending
+                                    ? movies.OrderByDescending(m => m.Title).ToList()
+                                    : movies.OrderBy(m => m.Title).ToList(),
+
+                        _ => movies
+                    };
+                }
+
+               
+                var pagedData = movies
+                    .Skip((query.PageNumber - 1) * query.PageSize)
+                    .Take(query.PageSize)
+                    .ToList();
+
+                
+                return pagedData.Select(m => new MovieResponseDto
+                {
+                    Id = m.Id,
+                    Name = m.Name,
+                    Title = m.Title,
+                    Genre = m.Genre,
+                    Category = m.Category,
+                    ReleaseYear = m.ReleaseYear,
+                    Rating = m.Rating
+                }).ToList();
+            }
+
+        
+        
 
         public async Task<bool> DeleteMovieAsync(int id)
         {

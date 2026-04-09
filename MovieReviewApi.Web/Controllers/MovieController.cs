@@ -1,11 +1,13 @@
 ﻿using Application.Dtos;
 using Application.Movies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MovieReviewApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class MovieController : ControllerBase
     {
         private readonly IMovieService _movieService;
@@ -43,7 +45,7 @@ namespace MovieReviewApi.Controllers
             return Ok(result);
         }
 
-        
+        [Authorize(Roles= "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create(CreateMovieDto request)
         {
@@ -51,7 +53,7 @@ namespace MovieReviewApi.Controllers
             return Ok(movie);
         }
 
-        
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UpdateMovieDto request)
         {
@@ -63,7 +65,7 @@ namespace MovieReviewApi.Controllers
             return Ok(movie);
         }
 
-        
+        [Authorize(Roles ="Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

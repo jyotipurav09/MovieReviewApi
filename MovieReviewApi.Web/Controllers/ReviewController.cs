@@ -1,6 +1,7 @@
 ﻿using Application.Dtos;
 using Application.Reviews;
 using Application.Reviews;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -8,6 +9,8 @@ namespace MovieReviewApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+
+    [Authorize]
     public class ReviewController : ControllerBase
     {
         private readonly IReviewService _reviewService;
@@ -17,7 +20,7 @@ namespace MovieReviewApi.Controllers
             _reviewService = reviewService;
         }
 
-       
+        [Authorize(Roles ="User")]
         [HttpPost]
         public async Task<IActionResult> CreateReview(CreateReviewDto request)
         {
@@ -25,7 +28,7 @@ namespace MovieReviewApi.Controllers
             return Ok(result);
         }
 
-        
+        [Authorize(Roles ="User")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateReview(int id, UpdateReviewDto request)
         {
@@ -37,6 +40,7 @@ namespace MovieReviewApi.Controllers
             return Ok(result);
         }
 
+        [Authorize(Roles ="User,Admin")]
        
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReview(int id)
@@ -49,7 +53,7 @@ namespace MovieReviewApi.Controllers
             return NoContent();
         }
 
-        
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetReviewById(int id)
         {
@@ -61,7 +65,7 @@ namespace MovieReviewApi.Controllers
             return Ok(result);
         }
 
-      
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAllReviews()
         {
@@ -69,7 +73,7 @@ namespace MovieReviewApi.Controllers
             return Ok(result);
         }
 
-        
+        [AllowAnonymous]
         [HttpGet("movie/{movieId}")]
         public async Task<IActionResult> GetReviewsByMovieId(int movieId)
         {

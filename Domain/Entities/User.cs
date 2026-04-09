@@ -16,11 +16,11 @@ namespace Domain.Entities
         public bool EmailVerified { get; set; }= false;
         public string? ProfilePhoto {  get; set; }
 
-        public string PasswordOtp { get; set; }
+        public string? PasswordOtp { get; set; }
 
         public DateTime? PasswordOtpExpiry { get; set; }
 
-        public string EmailOtp {  get; set; }
+        public string? EmailOtp {  get; set; }
 
         public DateTime? EmailOtpExpiry { get; set; }
         public DateTime? Dob {  get; set; }

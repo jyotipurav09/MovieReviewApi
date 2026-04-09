@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20260406083712_MakeEmailOtpNullable")]
+    partial class MakeEmailOtpNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,14 +69,11 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("nvarchar(2000)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Genre")
                         .IsRequired()
@@ -81,9 +81,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -92,29 +90,20 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Poster")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<double>("Rating")
-                        .HasColumnType("float");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ReleaseYear")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)")
-                        .HasDefaultValue("Untitled");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -203,9 +192,7 @@ namespace Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("Dob")
                         .HasColumnType("datetime2");
@@ -216,8 +203,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("EmailOtp")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("EmailOtpExpiry")
                         .HasColumnType("datetime2");
@@ -237,9 +223,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -256,8 +240,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordOtp")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("PasswordOtpExpiry")
                         .HasColumnType("datetime2");
@@ -268,18 +252,13 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("ProfilePhoto")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Role")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("YouTube")
                         .HasMaxLength(200)

@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20260407100628_UpdateUserFluentApiAndAddMovieTitle")]
+    partial class UpdateUserFluentApiAndAddMovieTitle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,18 +98,13 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<double>("Rating")
-                        .HasColumnType("float");
-
                     b.Property<int>("ReleaseYear")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .ValueGeneratedOnAdd()
                         .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)")
-                        .HasDefaultValue("Untitled");
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");

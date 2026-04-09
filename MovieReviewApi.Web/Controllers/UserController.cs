@@ -1,5 +1,6 @@
 ﻿using Application.Dtos;
 using Application.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -7,6 +8,8 @@ namespace MovieReviewApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -16,7 +19,7 @@ namespace MovieReviewApi.Controllers
             _userService = userService;
         }
 
-      
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> CreateUser(CreateUserDto request)
         {
@@ -24,7 +27,7 @@ namespace MovieReviewApi.Controllers
             return Ok(result);
         }
 
-        
+        [Authorize(Roles ="User,Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, UpdateUserDto request)
         {
@@ -36,7 +39,7 @@ namespace MovieReviewApi.Controllers
             return Ok(result);
         }
 
-       
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
@@ -48,6 +51,8 @@ namespace MovieReviewApi.Controllers
             return NoContent();
         }
 
+
+        [Authorize(Roles ="User,Admin")]
         
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(int id)
@@ -60,7 +65,7 @@ namespace MovieReviewApi.Controllers
             return Ok(result);
         }
 
-        
+        [Authorize(Roles ="Admin")]
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {

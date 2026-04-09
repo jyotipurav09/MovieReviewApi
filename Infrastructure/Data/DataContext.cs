@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -54,9 +55,11 @@ namespace Infrastructure.Data
                 .HasMaxLength(10);
 
                 entity.Property(u => u.Role)
-                .IsRequired();
+                .HasDefaultValue(Role.User);
 
-                entity.Property(u => u.ProfilePhoto);
+
+                entity.Property(u => u.ProfilePhoto)
+                .HasMaxLength(500);
 
                 entity.Property(u => u.Dob);
 
@@ -72,21 +75,43 @@ namespace Infrastructure.Data
                 entity.Property(u => u.IsDeleted)
                 .HasDefaultValue(false);
 
-             });
+                entity.Property(u => u.IsActive)
+              .HasDefaultValue(true);
 
-            modelBuilder.Entity<Movie>(entity =>
+                entity.Property(u => u.PasswordOtp)
+      .HasMaxLength(10);
+
+                entity.Property(u => u.EmailOtp)
+                    .HasMaxLength(10);
+
+                entity.Property(u => u.CreatedDate)
+                    .HasDefaultValueSql("GETUTCDATE()");
+
+                entity.Property(u => u.UpdatedDate)
+                    .HasDefaultValueSql("GETUTCDATE()");
+
+ });
+
+            modelBuilder.Entity<Movie>(entity =>    
             {
                 entity.HasKey(m => m.Id);
 
                 entity.Property(m => m.Name)
                 .IsRequired()
-                .HasMaxLength(200);
+                .HasMaxLength(200);   
+
+                entity.Property(m => m.Title)
+               .IsRequired()
+               .HasMaxLength(200)
+               .HasDefaultValue("Untitled");
 
                 entity.Property(m => m.Poster)
-                .IsRequired();
+                .IsRequired()
+                .HasMaxLength(500);
 
                 entity.Property(m => m.Description)
-                .IsRequired();
+                .IsRequired()
+                .HasMaxLength(2000);
 
                 entity.Property(m => m.ReleaseYear)
                 .IsRequired();
@@ -101,7 +126,23 @@ namespace Infrastructure.Data
                 entity.Property(m => m.Genre)
                 .IsRequired()
                 .HasMaxLength(100);
-         
+
+                entity.Property(m => m.IsDeleted)
+              .HasDefaultValue(false);
+
+                entity.Property(m => m.CreatedDate)
+                    .HasDefaultValueSql("GETUTCDATE()");
+
+                entity.Property(m => m.UpdatedDate)
+                    .HasDefaultValueSql("GETUTCDATE()");
+
+                // Relation with Reviews
+                entity.HasMany(m => m.Reviews)
+                    .WithOne(r => r.Movie)
+                    .HasForeignKey(r => r.MovieId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+
             });
             modelBuilder.Entity<Review>(entity =>
             {

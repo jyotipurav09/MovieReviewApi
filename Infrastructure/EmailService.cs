@@ -31,7 +31,9 @@ namespace Infrastructure
                 {
                     Port = port,
                     Credentials = new NetworkCredential(senderEmail, senderPassword),
-                    EnableSsl = true
+                    EnableSsl = true,
+                   UseDefaultCredentials = false
+
                 };
 
                 using (MailMessage message = new MailMessage())

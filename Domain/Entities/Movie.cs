@@ -10,6 +10,8 @@ namespace Domain.Entities
         public string Title { get; set; }
 
         public string Poster { get; set; }
+
+        public double Rating { get; set; } = 0;
         public string Description { get; set; }
         public int ReleaseYear { get; set; }
         public MovieType Type { get; set; }

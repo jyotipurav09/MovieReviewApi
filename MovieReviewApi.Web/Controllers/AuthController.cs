@@ -3,6 +3,7 @@ using Application.Dtos;
 using Application.Users;
 using Domain.Entities;
 using Infrastructure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,7 +25,8 @@ namespace MovieReviewApi.Controllers
             _emailService = emailService;
         }
 
-     
+
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register(CreateUserDto request)
         {
@@ -49,7 +51,7 @@ namespace MovieReviewApi.Controllers
             return Ok("User registered successfully");
         }
 
-       
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto request)
         {
@@ -71,6 +73,7 @@ namespace MovieReviewApi.Controllers
                 Email = user.Email
             });
         }
+        [Authorize]
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword(ChangePasswordDto request)
         {
@@ -92,6 +95,7 @@ namespace MovieReviewApi.Controllers
             return Ok("Password changed successfully");
         }
 
+        [AllowAnonymous]
         [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordDto request)
         {
@@ -112,7 +116,7 @@ namespace MovieReviewApi.Controllers
             return Ok("OTP sent to email");
         }
 
-        
+        [AllowAnonymous]
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordDto request)
         {
@@ -141,11 +145,6 @@ namespace MovieReviewApi.Controllers
 
             return Ok("Password reset successfully");
         }
-
-
-
-
-
 
 
 

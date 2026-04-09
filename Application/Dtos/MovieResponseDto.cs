@@ -15,7 +15,8 @@ namespace Application.Dtos
         public int ReleaseYear { get; set; }
         public MovieType Type { get; set; }
         public string Category { get; set; }
-        public string genre { get; set; }
+        public string Genre { get; set; }
+        public double Rating { get; set; } = 0;
 
         public bool IsDeleted { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;

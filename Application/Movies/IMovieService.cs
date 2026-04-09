@@ -9,6 +9,7 @@ namespace Application.Movies
         Task<MovieResponseDto> GetMovieByIdAsync(int id);
 
         Task<List<MovieResponseDto>> GetAllMoviesAsync();
+        Task<List<MovieResponseDto>> GetMoviesAsync(MovieQueryDto query);
 
         Task<List<MovieResponseDto>> SearchMoviesAsync(string title);
 
